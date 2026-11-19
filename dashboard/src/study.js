@@ -1,7 +1,7 @@
 export const fuelNames = { regu_gas: "Regular gasoline", diesel_gas: "Diesel" };
 export const styles = {
   actual: { name: "Actual price", color: "#283643", line: "solid" },
-  xgboost__sokundo: { name: "XGBoost", color: "#ce542d", line: "solid" },
+  xgboost__kiry: { name: "XGBoost", color: "#ce542d", line: "solid" },
   linear_regression__kay: {
     name: "Linear Regression",
     color: "#7562be",

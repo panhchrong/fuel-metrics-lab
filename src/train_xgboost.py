@@ -9,7 +9,7 @@ from gas_common import REPORTS_DIR, TARGETS, get_train_test, metrics, save_model
 from gas_wrappers import DeltaRegressor
 
 # ----------------------------------------------------- EDIT THIS PART
-AUTHOR = "sokundo"
+AUTHOR = "kiry"
 MODEL_NAME = "XGBoost (delta)"
 FEATURES_USED = ["lag_1", "lag_7", "other_lag_1", "roll_mean_7"]  # must include "lag_1"; time features overfit
 

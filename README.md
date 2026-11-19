@@ -1,6 +1,15 @@
 # Cambodia Gasoline Price Prediction: Team Model Comparison
 
-The study notebook trains three algorithms for each fuel and keeps the team attribution for each one. Kay is credited for Linear Regression, Heng for Random Tree, and Sokundo for XGBoost. All three algorithms are scored on the same test dates.
+## Collaborators
+
+| Name | Email | Work |
+| --- | --- | --- |
+| Roeuy Kay | kayroeuy66@gmail.com | Linear Regression |
+| Kong Sovankiry | kongsovankiry15@gmail.com | XGBoost |
+| Nom Sokheng | kongsovankiry15@gmail.com | Random Forest |
+| Sith Panhchakroung | sithpanhchrong@gmail.com | Organizer |
+
+The study notebook trains three algorithms for each fuel and keeps the team attribution for each one. Kay is credited for Linear Regression, Heng for Random Tree, and Kiry for XGBoost. All three algorithms are scored on the same test dates.
 
 - **Goal:** predict tomorrow's retail fuel price (KHR per litre) for **regular gasoline** (`regu_gas`) and **diesel** (`diesel_gas`).
 - **Train:** 15 Mar to 23 Sep 2026 (192 observed outcomes across 193 days). **Test:** 24 Sep to 11 Nov 2026 (49 days). The split date is fixed in `src/gas_common.py`.
@@ -66,14 +75,14 @@ You may use all of them or a subset. Don't add new feature names without agreein
 ## Current leaderboard (test set, 49 days)
 | Fuel | Rank | Model | Author | RMSE | MAE | R² | MAPE% |
 |---|---|---|---|---|---|---|---|
-| regu_gas | 1 | XGBoost | sokundo | **52.521** | 29.076 | 0.803 | 0.564 |
+| regu_gas | 1 | XGBoost | kiry | **52.521** | 29.076 | 0.803 | 0.564 |
 | regu_gas | 2 | Linear Regression | kay | 52.966 | 19.302 | 0.799 | 0.373 |
 | regu_gas | 3 | Random Tree | heng | 53.445 | 13.628 | 0.796 | 0.264 |
 | regu_gas | 4 | Naive (same as yesterday) | baseline | 53.452 | **12.245** | 0.796 | 0.237 |
 | diesel_gas | 1 | Linear Regression | kay | **65.795** | 18.869 | 0.868 | 0.332 |
 | diesel_gas | 2 | Naive (same as yesterday) | baseline | 67.386 | **13.265** | 0.861 | 0.235 |
 | diesel_gas | 3 | Random Tree | heng | 67.532 | 14.245 | 0.861 | 0.253 |
-| diesel_gas | 4 | XGBoost | sokundo | 68.269 | 34.822 | 0.858 | 0.615 |
+| diesel_gas | 4 | XGBoost | kiry | 68.269 | 34.822 | 0.858 | 0.615 |
 
 Yesterday's price has the lowest MAE for both fuels. Each fuel changed price on three holdout days.
 
@@ -81,7 +90,7 @@ Yesterday's price has the lowest MAE for both fuels. Each fuel changed price on 
 
 - **Linear Regression · Kay** uses a standard scaler and predicts price directly from yesterday's price for both fuels.
 - **Random Tree · Heng** predicts a price adjustment using yesterday's quote for regular gasoline and the price-history inputs for diesel.
-- **XGBoost · Sokundo** predicts a price adjustment using the price-history inputs for regular gasoline and yesterday's quote for diesel.
+- **XGBoost · Kiry** predicts a price adjustment using the price-history inputs for regular gasoline and yesterday's quote for diesel.
 
 The price-history inputs are `lag_1`, `lag_7`, `other_lag_1`, and `roll_mean_7`. To reproduce the earlier Random Tree or XGBoost experiments, run `src/train_random_tree.py` or `src/train_xgboost.py` with Python. Those scripts save to `reports/legacy-models/` by default.
 

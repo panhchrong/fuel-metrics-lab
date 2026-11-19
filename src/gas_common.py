@@ -25,7 +25,7 @@ REPORTS_DIR = PROJECT_ROOT / "reports"
 TARGETS = ["regu_gas", "diesel_gas"]
 FEATURES = ["day_index", "month", "day_of_week", "lag_1", "lag_7", "other_lag_1", "roll_mean_7"]
 STUDY_FEATURES = ["last_change", "flat_days", "weekday_sin", "weekday_cos", "ten_day_boundary"]
-STUDY_MODEL_AUTHORS = {"Linear Regression": "kay", "Random Tree": "heng", "XGBoost": "sokundo"}
+STUDY_MODEL_AUTHORS = {"Linear Regression": "kay", "Random Tree": "heng", "XGBoost": "kiry"}
 
 START_DATE = pd.Timestamp("2026-03-08")  # origin of day_index; do not change
 TEST_START = pd.Timestamp("2026-09-24")  # first day of the shared test set; do not change

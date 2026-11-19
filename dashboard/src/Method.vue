@@ -16,7 +16,7 @@ const descriptions = {
     "Fit a shallow randomized decision tree to the daily price change. Smooth the estimate toward the average training change, halve it, and add it to yesterday’s price.",
     "fuel_price_study.ipynb · src/random_tree_model.py",
   ],
-  xgboost__sokundo: [
+  xgboost__kiry: [
     "Fit 100 depth-two boosted trees to the daily price change and add the estimated change to yesterday’s price.",
     "fuel_price_study.ipynb · src/gas_wrappers.py",
   ],
