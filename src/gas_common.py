@@ -25,6 +25,7 @@ REPORTS_DIR = PROJECT_ROOT / "reports"
 TARGETS = ["regu_gas", "diesel_gas"]
 FEATURES = ["day_index", "month", "day_of_week", "lag_1", "lag_7", "other_lag_1", "roll_mean_7"]
 STUDY_FEATURES = ["last_change", "flat_days", "weekday_sin", "weekday_cos", "ten_day_boundary"]
+STUDY_MODEL_AUTHORS = {"Linear Regression": "kay", "Random Tree": "heng", "XGBoost": "sokundo"}
 
 START_DATE = pd.Timestamp("2026-03-08")  # origin of day_index; do not change
 TEST_START = pd.Timestamp("2026-09-24")  # first day of the shared test set; do not change
@@ -98,6 +99,11 @@ def _slug(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", "_", text.lower()).strip("_")
 
 
+def model_bundle_path(target: str, model_name: str, author: str,
+                      out_dir: str | Path = MODELS_DIR) -> Path:
+    return Path(out_dir) / f"{target}__{_slug(model_name)}__{_slug(author)}.pkl"
+
+
 def save_model_bundle(model, *, model_name: str, author: str, target: str,
                       features: list[str], train: pd.DataFrame,
                       out_dir: str | Path = MODELS_DIR) -> Path:
@@ -117,9 +123,8 @@ def save_model_bundle(model, *, model_name: str, author: str, target: str,
         "sklearn_version": sklearn.__version__,
         "created_at": _dt.date.today().isoformat(),
     }
-    out_dir = Path(out_dir)
-    out_dir.mkdir(parents=True, exist_ok=True)
-    path = out_dir / f"{target}__{_slug(model_name)}__{_slug(author)}.pkl"
+    path = model_bundle_path(target, model_name, author, out_dir)
+    path.parent.mkdir(parents=True, exist_ok=True)
     joblib.dump(bundle, path)
     return path
 

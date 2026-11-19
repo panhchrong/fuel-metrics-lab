@@ -1,7 +1,8 @@
 """Export the fitted notebook estimators for forecasting in the static Vue dashboard."""
 import json
 
-from gas_common import MODELS_DIR, PROJECT_ROOT, START_DATE, TARGETS, load_model_bundle
+from gas_common import (PROJECT_ROOT, START_DATE, STUDY_MODEL_AUTHORS, TARGETS,
+                        load_model_bundle, model_bundle_path)
 
 
 def pack_tree(left, right, features, thresholds, leaves, node=0):
@@ -44,14 +45,17 @@ def export_estimator(name, model):
 
 def main():
     models = {}
-    for path in sorted((MODELS_DIR / "study").glob("*.pkl")):
-        bundle = load_model_bundle(path)
-        name, target = bundle["model_name"], bundle["target"]
-        models.setdefault(name, {})[target] = {
-            "features": bundle["features"], **export_estimator(name, bundle["model"])}
-    if set(models) != {"Linear Regression", "Random Tree", "XGBoost"} or any(
-            set(pair) != set(TARGETS) for pair in models.values()):
-        raise ValueError("Forecasting requires a fitted model for each algorithm and fuel")
+    for name, author in STUDY_MODEL_AUTHORS.items():
+        models[name] = {}
+        for target in TARGETS:
+            path = model_bundle_path(target, name, author)
+            bundle = load_model_bundle(path)
+            if (bundle["model_name"], bundle["author"], bundle["target"]) != (name, author, target):
+                raise ValueError(f"{path.name}: bundle metadata does not match its filename")
+            models[name][target] = {
+                "author": author, "features": bundle["features"],
+                **export_estimator(name, bundle["model"]),
+            }
     output = PROJECT_ROOT / "dashboard/public/study/forecast-models.json"
     output.write_text(json.dumps({"startDate": START_DATE.date().isoformat(), "models": models},
                                  separators=(",", ":"), allow_nan=False) + "\n")

@@ -349,7 +349,7 @@ onBeforeUnmount(() => window.removeEventListener("hashchange", syncTab));
                   ><small>{{ m.author }}</small>
                 </td>
                 <td :class="{ bold: sort === 'RMSE' }">
-                  {{ num(m.scores.RMSE, 2) }}
+                  {{ num(m.scores.RMSE, 3) }}
                 </td>
                 <td :class="{ bold: sort === 'MAE' }">
                   {{ num(m.scores.MAE, 2) }}

@@ -1,4 +1,4 @@
-"""Tune Random Tree on training dates only, then evaluate the fixed test period."""
+"""Reproduce the original team's tuned Random Tree on the fixed test period."""
 import argparse
 from pathlib import Path
 
@@ -7,7 +7,7 @@ import pandas as pd
 from sklearn.model_selection import ParameterGrid, TimeSeriesSplit
 
 from gas_common import (
-    FEATURES, MODELS_DIR, REPORTS_DIR, TARGETS, get_train_test, metrics, save_model_bundle,
+    FEATURES, REPORTS_DIR, TARGETS, get_train_test, metrics, save_model_bundle,
 )
 from random_tree_model import RandomTreeChangeRegressor
 
@@ -77,7 +77,7 @@ def tune_model(train):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--author", default=AUTHOR)
-    parser.add_argument("--out-dir", default=str(MODELS_DIR))
+    parser.add_argument("--out-dir", default=str(REPORTS_DIR / "legacy-models"))
     parser.add_argument("--reports-dir", default=str(REPORTS_DIR))
     args = parser.parse_args()
     reports = Path(args.reports_dir)

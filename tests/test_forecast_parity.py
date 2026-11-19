@@ -10,7 +10,8 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from gas_common import MODELS_DIR, TARGETS, load_clean_data, load_model_bundle, make_features
+from gas_common import (STUDY_MODEL_AUTHORS, TARGETS, load_clean_data, load_model_bundle,
+                        make_features, model_bundle_path)
 
 
 class ForecastParityTest(unittest.TestCase):
@@ -35,19 +36,17 @@ class ForecastParityTest(unittest.TestCase):
         """
         browser = json.loads(subprocess.check_output(
             ["node", "--input-type=module", "-e", script, json.dumps(quote)], cwd=ROOT))
-        bundles = {}
-        for path in (MODELS_DIR / "study").glob("*.pkl"):
-            bundle = load_model_bundle(path)
-            bundles[bundle["model_name"], bundle["target"]] = bundle
         self.assertEqual(set(browser), {"Linear Regression", "Random Tree", "XGBoost"})
         history.loc[quote_date] = [quote[fuel] for fuel in TARGETS]
         for name, rows in browser.items():
             with self.subTest(model=name):
                 projected = history.asfreq("D").ffill()
+                bundles = {fuel: load_model_bundle(model_bundle_path(fuel, name, STUDY_MODEL_AUTHORS[name]))
+                           for fuel in TARGETS}
                 for day in pd.date_range(quote_date + pd.Timedelta(days=1), limit):
                     projected.loc[day] = np.nan
                     for fuel in TARGETS:
-                        bundle = bundles[name, fuel]
+                        bundle = bundles[fuel]
                         features = make_features(projected, fuel, include_study=True)
                         projected.loc[day, fuel] = bundle["model"].predict(
                             features.loc[[day], bundle["features"]])[0]

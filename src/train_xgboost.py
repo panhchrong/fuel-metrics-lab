@@ -1,11 +1,11 @@
-"""Train XGBoost (predicting the change from yesterday) for both fuels.
+"""Reproduce the original team's XGBoost training for both fuels.
 Run from the project folder:  python src/train_xgboost.py
 """
 import argparse
 
 from xgboost import XGBRegressor
 
-from gas_common import MODELS_DIR, TARGETS, get_train_test, metrics, save_model_bundle
+from gas_common import REPORTS_DIR, TARGETS, get_train_test, metrics, save_model_bundle
 from gas_wrappers import DeltaRegressor
 
 # ----------------------------------------------------- EDIT THIS PART
@@ -23,7 +23,7 @@ def make_model():
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--out-dir", default=str(MODELS_DIR))
+    parser.add_argument("--out-dir", default=str(REPORTS_DIR / "legacy-models"))
     args = parser.parse_args()
     for target in TARGETS:
         train, test = get_train_test(target)

@@ -1,4 +1,6 @@
-# Cambodia fuel price model comparison
+# Original dashboard implementation plan
+
+This plan records the initial team-model comparison. See the [current leaderboard](README.md#current-leaderboard-test-set-49-days) for the notebook-trained models now used by the project.
 
 Build a Vue dashboard that answers **which one-day-ahead model best predicts each fuel, and where does it beat yesterday’s price?** The first version will use a static JSON export from Python so the historical comparison can run without a backend.
 

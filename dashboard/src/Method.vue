@@ -8,17 +8,17 @@ const models = computed(() =>
   props.fuel.models.filter((m) => m.id !== "baseline"),
 );
 const descriptions = {
-  linear_regression_time_lags__kay: [
-    "Standardize the seven inputs and fit a linear regression to the price level. The saved estimator and the project README describe Kay’s pipeline. The checkout does not include its training script.",
-    "README.md · saved Linear Regression bundle",
+  linear_regression__kay: [
+    "Standardize the selected inputs and fit a linear regression to the next day’s price.",
+    "fuel_price_study.ipynb",
   ],
   random_tree__heng: [
-    "Learn the change from yesterday with a regularized decision tree. Tune on four chronological 28-day validation folds inside training, select a simpler tree within one standard error, then refit the selected configuration.",
-    "src/train_random_tree.py · src/random_tree_model.py",
+    "Fit a shallow randomized decision tree to the daily price change. Smooth the estimate toward the average training change, halve it, and add it to yesterday’s price.",
+    "fuel_price_study.ipynb · src/random_tree_model.py",
   ],
-  xgboost_delta__sokundo: [
-    "Fit 100 depth-two boosted trees to the change from yesterday using four lag-based inputs. Add the estimated change to yesterday’s actual price.",
-    "src/train_xgboost.py · src/gas_wrappers.py",
+  xgboost__sokundo: [
+    "Fit 100 depth-two boosted trees to the daily price change and add the estimated change to yesterday’s price.",
+    "fuel_price_study.ipynb · src/gas_wrappers.py",
   ],
 };
 const steps = computed(() => [
@@ -32,12 +32,12 @@ const steps = computed(() => [
   ],
   [
     "Construct past-only features",
-    "Use the day index, month, weekday, one- and seven-day price lags, yesterday’s other-fuel price and a seven-day mean ending yesterday. Drop the first seven days while the lag window fills.",
+    "Build price lags, a trailing seven-day average, calendar inputs and recent price-change features. The first seven days supply lag history.",
     "src/gas_common.py · make_features",
   ],
   [
     "Split in chronological order",
-    "Training uses " +
+    "The training period covers " +
       props.snapshot.trainDays +
       " days from " +
       date(props.snapshot.trainStart) +
@@ -47,10 +47,15 @@ const steps = computed(() => [
           props.snapshot.dates.indexOf(props.snapshot.testStart) - 1
         ],
       ) +
-      ". Reserve the next " +
+      ". The filled day supplies history. Reserve the next " +
       props.snapshot.testDays +
       " days for testing.",
     "src/gas_common.py · train_test_split_time",
+  ],
+  [
+    "Select features and refit",
+    "Compare six feature sets for each algorithm on four expanding 28-day validation windows. Choose the lowest pooled validation RMSE and refit on the observed prices in the training period.",
+    "fuel_price_study.ipynb",
   ],
   [
     "Evaluate the saved models",

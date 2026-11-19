@@ -210,9 +210,9 @@ const deltas = computed(() => {
       <div>
         <div class="title-icon">
           <ImageIcon />
-          <h2>Original team model comparison</h2>
+          <h2>Holdout RMSE by model</h2>
         </div>
-        <p>Original team bundles · test RMSE in KHR/L</p>
+        <p>Study models and yesterday’s price · KHR/L</p>
       </div>
     </div>
     <a :href="base + 'model_comparison.png'" target="_blank" rel="noopener"

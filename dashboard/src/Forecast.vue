@@ -80,8 +80,12 @@ const chart = computed(() => {
         <p>{{ fuelNames[fuelId] }} · Daily · KHR/L</p>
       </div>
       <div class="controls">
-        <label>Notebook model
-          <select v-model="model"><option>Random Tree</option><option>Linear Regression</option><option>XGBoost</option></select>
+        <label>Forecast model
+          <select v-model="model">
+            <option v-for="name in ['Random Tree', 'Linear Regression', 'XGBoost']" :key="name" :value="name">
+              {{ name }}<template v-if="bundle?.models[name]?.[fuelId]?.author"> · {{ bundle.models[name][fuelId].author }}</template>
+            </option>
+          </select>
         </label>
         <label>Forecast through
           <input type="date" v-model="end" :min="minimum" :max="limit" :disabled="!daysLeft" required />
