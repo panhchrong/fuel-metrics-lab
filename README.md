@@ -1,5 +1,7 @@
 # Cambodia Gasoline Price Prediction: Team Model Comparison
 
+[Open the deployed dashboard](https://fuel-metrics.cyclostack.dev/)
+
 ## Collaborators
 
 | Name | Email | Work |
